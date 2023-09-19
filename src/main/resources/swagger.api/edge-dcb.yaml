@@ -7,8 +7,8 @@ servers:
 paths:
   /transactions/{dcbTransactionId}:
     post:
-      summary: Create circulation request
-      operationId: createCirculationRequest
+      summary: Create DCB transaction request
+      operationId: createDCBTransaction
       parameters:
         - $ref: '#/components/parameters/dcbTransactionId'
       tags:
@@ -76,10 +76,11 @@ components:
           schema:
             type: object
             properties:
-              item:
-                $ref: 'schemas/dcbItem.yaml#/DCBItem'
-              patron:
-                $ref: 'schemas/dcbPatron.yaml#/DCBPatron'
+              DCBItem:
+                $ref: 'schemas/dcbItem.yaml'
+              DCBPatron:
+                $ref: 'schemas/dcbPatron.yaml'
+
   responses:
     TransactionStatus:
       description: Transaction Status object
