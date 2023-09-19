@@ -27,7 +27,7 @@ paths:
   /transactions/{dcbTransactionId}/status:
     get:
       summary: Get transaction status across circulation institutions
-      operationId: getTransactionStatus
+      operationId: getDCBTransactionStatus
       parameters:
         - $ref: '#/components/parameters/dcbTransactionId'
       tags:
@@ -43,7 +43,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     put:
       summary: Update transaction status across circulation institutions
-      operationId: updateTransactionStatus
+      operationId: updateDCBTransactionStatus
       tags:
         - circulation
       parameters:
