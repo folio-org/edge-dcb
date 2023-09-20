@@ -3,6 +3,8 @@ okapi_url: ${Dokapi_url}
 spring:
   application:
     name: edge-dcb
+  main:
+    allow-bean-definition-overriding: true
   jackson:
     default-property-inclusion: non_null
   liquibase:
