@@ -6,7 +6,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
 @ActiveProfiles({"test"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class EdgeDcbApplicationTest {

@@ -54,8 +54,8 @@ class DcbEdgeRequestHandlingTest {
   @Test
   void shouldConvertApiKeyToHeaders() throws Exception {
     // Given
-    String tenant = "diku",
-      username = "diku_admin",
+    String tenant = "test_tenant",
+      username = "user",
       token = "This is totally a real test token!";
     var transactionId = "123";
     var apiKey = ApiKeyUtils.generateApiKey(10, tenant, username);
@@ -84,8 +84,8 @@ class DcbEdgeRequestHandlingTest {
   @Test
   void shouldReturnClientErrors() throws Exception {
     // Given
-    String tenant = "diku",
-      username = "diku_admin",
+    String tenant = "test_tenant",
+      username = "user",
       token = "This is totally a real token. For real!";
     var transactionId = "123";
     var apiKey = ApiKeyUtils.generateApiKey(10, tenant, username);
