@@ -1,4 +1,4 @@
-package org.folio.ed.edge.controller;
+package org.folio.ed.controller;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
