@@ -349,12 +349,6 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
         <configuration>
-          <excludes>
-            <exclude>org/folio/ed/Controller/**Test.class</exclude>
-          </excludes>
-          <includes>
-            <include>org/folio/ed/TestSuite.class</include>
-          </includes>
           <useSystemClassLoader>false</useSystemClassLoader>
         </configuration>
       </plugin>
