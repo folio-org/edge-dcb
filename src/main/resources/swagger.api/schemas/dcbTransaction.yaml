@@ -6,7 +6,7 @@ DcbTransaction:
       patron:
         $ref: 'dcbPatron.yaml#/DcbPatron'
       pickup:
-        $red: 'dcbPickup.yaml#/DcbPickup'
+        $ref: 'dcbPickup.yaml#/DcbPickup'
       role:
         type: string
         enum:
