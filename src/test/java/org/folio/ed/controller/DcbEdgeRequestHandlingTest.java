@@ -156,7 +156,7 @@ class DcbEdgeRequestHandlingTest {
     .build();
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(404)
-      .setBody(errors.toString()));
+      .setBody(asJsonString(errors)));
     var postResponse = mockMvc.perform(post("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
         .content(asJsonString(dcbTransaction))
         .contentType(MediaType.APPLICATION_JSON)
