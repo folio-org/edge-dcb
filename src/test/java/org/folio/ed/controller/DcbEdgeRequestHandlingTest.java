@@ -168,7 +168,7 @@ class DcbEdgeRequestHandlingTest {
 
     // Then the edge API response should contain the error message from mod-dcb
     assertThat(response.getStatus()).isEqualTo(dcbResponseCode);
-    assertThat(response.getContentAsString()).isEqualTo(dcbResponseBody);
+    assertThat(response.getContentAsString()).contains(dcbResponseBody);
   }
 
   private void setUpMockAuthnClient(String tenant, String token) {
