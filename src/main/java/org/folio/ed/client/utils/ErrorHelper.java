@@ -45,7 +45,6 @@ public class ErrorHelper {
 
   public enum ErrorCode {
     VALIDATION_ERROR,
-    NOT_FOUND_ERROR,
     INTERNAL_SERVER_ERROR
   }
 

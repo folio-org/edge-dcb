@@ -50,19 +50,18 @@ public class ExceptionHandlingController {
    */
   @ExceptionHandler(FeignException.class)
   public ResponseEntity<Errors> handleFeignError(FeignException ex) {
-    log.error("Unexpected exception: {}", ex.getMessage());
-
+    logExceptionMessage(ex);
     var status = HttpStatus.resolve(ex.status());
     String body = ex.contentUTF8();
     Errors errors;
     try {
       errors = objectMapper.readValue(body, Errors.class);
+      return new ResponseEntity<>(errors, status);
     } catch (JsonProcessingException e) {
       log.warn("Unexpected exception. Can't retrieve response body: {}", e.getMessage());
       errors = createExternalError(ex.getMessage(), INTERNAL_SERVER_ERROR);
+      return new ResponseEntity<>(errors, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    return new ResponseEntity<>(errors, status);
   }
 
   private void logExceptionMessage(Exception ex) {
