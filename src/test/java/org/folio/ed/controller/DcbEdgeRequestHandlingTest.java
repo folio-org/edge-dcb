@@ -219,8 +219,8 @@ class DcbEdgeRequestHandlingTest {
       .andReturn()
       .getResponse();
 
-    // Then the edge API response should contain the error message from mod-dcb
-    assertThat(response.getStatus()).isEqualTo(dcbResponseCode);
+    // If mod-dcb doesn't return the error of type errors, then we edge-dcb will throw INTERNAL_SERVER_ERROR
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
     assertThat(response.getContentAsString()).contains(dcbResponseBody);
   }
 
