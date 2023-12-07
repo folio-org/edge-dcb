@@ -2,6 +2,7 @@ server:
   port: 8081
 secure_store: ephemeral
 secure_store_props: src/main/resources/ephemeral.properties
+okapi_url: http://localhost:9130
 spring:
   application:
     name: edge-dcb
@@ -38,7 +39,6 @@ folio:
   system-user:
     username: system-user
   environment: folio
-  okapi-url: ${okapi_url:http://okapi:9130}
 logging:
   level:
     org:
