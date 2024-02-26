@@ -47,7 +47,7 @@ The edge-fqm API is secured via the facilities provided by edge-common. More spe
 For Karate Tests to run successfully the `ephemeral.properties` values would be as mentioned below -
 ```
 secureStore.type=Ephemeral
-tenants=test_edge_dcb
+tenants=testedgedcb
 test_edge_dcb=dcbClient,password
 ```
 *Note: The value `test_edge_dcb` is the test tenant needed will be used by Karate test cases to execute all the scenarios.
