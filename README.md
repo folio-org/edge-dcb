@@ -28,6 +28,10 @@ API provides the following URLs for working with DCB :
 # Security
 The edge-fqm API is secured via the facilities provided by edge-common. More specifically, via API Key. See edge-common for additional details.See [edge-common-spring](https://github.com/folio-org/edge-common-spring)
 
+## Required Permissions
+Institutional users should be granted the following permissions in order to use this edge API:
+- `dcb.all`
+
 # Installation/Deployment
 
 ## Configuration
@@ -42,6 +46,15 @@ The edge-fqm API is secured via the facilities provided by edge-common. More spe
 | `okapi_url`          | `http://okapi:9130`	                      | Okapi (URL)                                                         |
 | `secure_store`       | `Ephemeral`                               | Type of secure store to use.  Valid: `Ephemeral`, `AwsSsm`, `Vault` |
 | `secure_store_props` | `src/main/resources/ephemeral.properties` | Path to a properties file specifying secure store configuration     |
+
+### Ephemeral properties for Karate runs.
+For Karate Tests to run successfully the `ephemeral.properties` values would be as mentioned below -
+```
+secureStore.type=Ephemeral
+tenants=testedgedcb
+testedgedcb=dcbClient,password
+```
+*Note: The value `testedgedcb` is the test tenant needed will be used by Karate test cases to execute all the scenarios.
 
 
 ### Configuring spring-boot
