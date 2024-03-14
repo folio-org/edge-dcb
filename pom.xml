@@ -28,7 +28,6 @@
     <mapstruct.version>1.5.3.Final</mapstruct.version>
     <wiremock-standalone.version>3.4.2</wiremock-standalone.version>
     <awaitility.version>4.2.0</awaitility.version>
-    <spring-boot-maven-plugin.version>3.2.3</spring-boot-maven-plugin.version>
     <copy-rename-maven-plugin.version>1.0.1</copy-rename-maven-plugin.version>
     <openapi-generator-maven-plugin.version>7.3.0</openapi-generator-maven-plugin.version>
     <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
@@ -214,7 +213,6 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${spring-boot-maven-plugin.version}</version>
         <configuration>
           <layers>
             <enabled>true</enabled>
