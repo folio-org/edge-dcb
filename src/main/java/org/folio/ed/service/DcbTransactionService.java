@@ -38,7 +38,7 @@ public class DcbTransactionService {
                                                                       Integer pageSize) {
     log.info("getTransactionStatusList:: get transaction status list with fromDate {}, toDate {}, pageNumber {}, pageSize {}",
       fromDate, toDate, pageNumber, pageSize);
-    return dcbClient.getTransactionStatusList(fromDate, toDate, pageNumber, pageSize);
+    return dcbClient.getTransactionStatusList(fromDate.toString(), toDate.toString(), pageNumber, pageSize);
   }
 
 }

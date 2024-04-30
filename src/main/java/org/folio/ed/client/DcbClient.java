@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.OffsetDateTime;
-
 @FeignClient(name = "transactions", configuration = OkapiFeignClientConfig.class)
 public interface DcbClient {
 
@@ -29,6 +27,6 @@ public interface DcbClient {
                                                                       @RequestBody TransactionStatus transactionStatus);
 
   @GetMapping(value = "/status")
-  TransactionStatusResponseCollection getTransactionStatusList(@RequestParam("fromDate") OffsetDateTime fromDate, @RequestParam("toDate") OffsetDateTime toDate,
+  TransactionStatusResponseCollection getTransactionStatusList(@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
                                                                @RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize);
 }
