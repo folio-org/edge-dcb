@@ -1,3 +1,7 @@
+## v1.1.4 - 2024-11-20
+
+* EDGEDCB-33: Spring Boot 3.2.12 fixing tomcat HTTP/2 DoS CVE-2024-34750
+
 ## v1.1.3 - 2024-05-29
 
 * EDGEDCB-26-edge-common-spring 2.4.5: AwsParamStore to support FIPS-approved crypto modules
