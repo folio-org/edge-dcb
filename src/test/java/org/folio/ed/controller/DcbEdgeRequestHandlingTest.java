@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+
 import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.edge.core.utils.ApiKeyUtils;
 import org.folio.edgecommonspring.client.EdgeFeignClientProperties;
@@ -34,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.folio.ed.utils.EntityUtils.createDcbTransaction;
+import static org.folio.ed.utils.EntityUtils.createDcbUpdateTransaction;
 import static org.folio.ed.utils.EntityUtils.createTransactionStatus;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -121,6 +123,32 @@ class DcbEdgeRequestHandlingTest {
     assertThat(headers.get(XOkapiHeaders.TOKEN)).isEqualTo(TOKEN);
     assertThat(headers.get(XOkapiHeaders.USER_ID)).isNull();
     assertThat(postResponse.getContentAsString()).isEqualTo(responseBody);
+  }
+
+  @Test
+  void shouldConvertApiKeyToHeadersForPutTransactionDetails() throws Exception {
+    // Given
+    var apiKey = ApiKeyUtils.generateApiKey(10, TENANT, USERNAME);
+    setUpMockAuthnClient(TOKEN);
+    // When we make a valid request to mod-dcb with the API key set
+    mockDcbServer.enqueue(new MockResponse()
+      .setResponseCode(204)
+      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
+    var putResponse = mockMvc.perform(put("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
+        .content(asJsonString(createDcbUpdateTransaction()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+      .andReturn()
+      .getResponse();
+
+    // Then the outgoing response from the edge API should contain the Okapi auth headers and the response body should
+    // match mod-dcb response
+    var headers = mockDcbServer.takeRequest().getHeaders();
+    assertThat(headers.get(XOkapiHeaders.TENANT)).isEqualTo(TENANT);
+    assertThat(headers.get(XOkapiHeaders.TOKEN)).isEqualTo(TOKEN);
+    assertThat(headers.get(XOkapiHeaders.USER_ID)).isNull();
+    assertThat(putResponse.getContentAsString()).isEmpty();
+    assertThat(putResponse.getStatus()).isEqualTo(204);
   }
 
   @Test

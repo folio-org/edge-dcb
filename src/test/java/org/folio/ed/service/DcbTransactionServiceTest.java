@@ -2,6 +2,7 @@ package org.folio.ed.service;
 
 import org.folio.ed.client.DcbClient;
 import org.folio.ed.domain.dto.DcbTransaction;
+import org.folio.ed.domain.dto.DcbUpdateTransaction;
 import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.ed.domain.dto.TransactionStatusResponse;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.OffsetDateTime;
 
 import static org.folio.ed.utils.EntityUtils.*;
@@ -39,14 +39,20 @@ class DcbTransactionServiceTest {
   void createDcbTransactionTest() {
     Mockito.when(dcbClient.createCirculationRequest(anyString(), any(DcbTransaction.class))).thenReturn(createTransactionStatusResponse(TransactionStatusResponse.StatusEnum.CREATED));
     dcbTransactionService.createDCBTransaction("123", createDcbTransaction());
-    Mockito.verify(dcbClient).createCirculationRequest(anyString(), any(DcbTransaction.class));
+    verify(dcbClient).createCirculationRequest(anyString(), any(DcbTransaction.class));
+  }
+
+  @Test
+  void updateDcbTransactionDetails() {
+    dcbTransactionService.updateTransactionDetails("123", createDcbUpdateTransaction());
+    verify(dcbClient).updateTransactionDetails(anyString(), any(DcbUpdateTransaction.class));
   }
 
   @Test
   void updateDcbTransactionStatusTest() {
     Mockito.when(dcbClient.updateTransactionStatus(anyString(), any(TransactionStatus.class))).thenReturn(createTransactionStatusResponse(TransactionStatusResponse.StatusEnum.CREATED));
     dcbTransactionService.updateDCBTransactionStatus("123", createTransactionStatus(TransactionStatus.StatusEnum.OPEN));
-    Mockito.verify(dcbClient).updateTransactionStatus(anyString(), any(TransactionStatus.class));
+    verify(dcbClient).updateTransactionStatus(anyString(), any(TransactionStatus.class));
   }
 
   @Test
@@ -54,6 +60,6 @@ class DcbTransactionServiceTest {
     var startDate = OffsetDateTime.now().minusDays(1);
     var endDate = OffsetDateTime.now();
     dcbTransactionService.getTransactionStatusList(startDate, endDate, 0, 100);
-    Mockito.verify(dcbClient).getTransactionStatusList(startDate.toString(), endDate.toString(), 0, 100);
+    verify(dcbClient).getTransactionStatusList(startDate.toString(), endDate.toString(), 0, 100);
   }
 }

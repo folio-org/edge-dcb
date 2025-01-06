@@ -3,6 +3,8 @@ package org.folio.ed.utils;
 import org.folio.ed.domain.dto.DcbItem;
 import org.folio.ed.domain.dto.DcbPatron;
 import org.folio.ed.domain.dto.DcbTransaction;
+import org.folio.ed.domain.dto.DcbUpdateTransaction;
+import org.folio.ed.domain.dto.DcbUpdateItem;
 import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.ed.domain.dto.TransactionStatusResponse;
 
@@ -16,6 +18,16 @@ public class EntityUtils {
       .item(createDcbItem())
       .patron(createDcbPatron())
       .role(DcbTransaction.RoleEnum.LENDER)
+      .build();
+  }
+
+  public static DcbUpdateTransaction createDcbUpdateTransaction() {
+    return DcbUpdateTransaction.builder()
+      .item(DcbUpdateItem.builder()
+          .barcode(ITEM_ID)
+          .materialType("book")
+          .lendingLibraryCode("KU")
+          .build())
       .build();
   }
 
