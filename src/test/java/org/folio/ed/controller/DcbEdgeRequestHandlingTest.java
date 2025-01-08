@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-
 import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.edge.core.utils.ApiKeyUtils;
 import org.folio.edgecommonspring.client.EdgeFeignClientProperties;
@@ -25,7 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.io.IOException;
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -311,6 +309,30 @@ class DcbEdgeRequestHandlingTest {
     // If mod-dcb doesn't return the error of type errors, then we edge-dcb will throw INTERNAL_SERVER_ERROR
     assertThat(response.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
     assertThat(response.getContentAsString()).contains(dcbResponseBody);
+  }
+
+  @Test
+  void shouldReturnClientErrorsWhenPutTransactionDetails() throws Exception {
+    // Given
+    var apiKey = ApiKeyUtils.generateApiKey(10, TENANT, USERNAME);
+    var dcbResponseCode = HttpStatus.I_AM_A_TEAPOT.value(); // Arbitrary HTTP error status code
+    var dcbResponseBody = "I'm a teapot!";
+    setUpMockAuthnClient(TOKEN);
+
+    // When mod-dcb responds with an error
+    mockDcbServer.enqueue(new MockResponse()
+      .setResponseCode(dcbResponseCode)
+      .setBody(dcbResponseBody));
+    var putResponse = mockMvc.perform(put("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
+        .content(asJsonString(createDcbUpdateTransaction()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+      .andReturn()
+      .getResponse();
+
+    // If mod-dcb doesn't return the error of type errors, then we edge-dcb will throw INTERNAL_SERVER_ERROR
+    assertThat(putResponse.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
+    assertThat(putResponse.getContentAsString()).contains(dcbResponseBody);
   }
 
   private void setUpMockAuthnClient(String token) {
