@@ -10,13 +10,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.folio.ed.utils.EntityUtils.*;
+import static org.folio.ed.utils.EntityUtils.createDcbTransaction;
+import static org.folio.ed.utils.EntityUtils.createTransactionStatus;
+import static org.folio.ed.utils.EntityUtils.createTransactionStatusResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 @ExtendWith(MockitoExtension.class)
 class DcbTransactionServiceTest {
