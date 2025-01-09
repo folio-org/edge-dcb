@@ -5,6 +5,7 @@ import org.folio.ed.domain.dto.DcbTransaction;
 import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.ed.domain.dto.TransactionStatusResponse;
 import org.folio.ed.domain.dto.TransactionStatusResponseCollection;
+import org.folio.ed.domain.dto.DcbUpdateTransaction;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,11 @@ public class DcbTransactionService {
     log.info("getTransactionStatusList:: get transaction status list with fromDate {}, toDate {}, pageNumber {}, pageSize {}",
       fromDate, toDate, pageNumber, pageSize);
     return dcbClient.getTransactionStatusList(fromDate.toString(), toDate.toString(), pageNumber, pageSize);
+  }
+
+  public void updateTransactionDetails(String dcbTransactionId, DcbUpdateTransaction dcbUpdateTransaction) {
+    log.info("updateTransactionDetails:: Updating transaction item details  for id: {} to {}", dcbTransactionId, dcbUpdateTransaction.getItem());
+    dcbClient.updateTransactionDetails(dcbTransactionId, dcbUpdateTransaction);
   }
 
 }
