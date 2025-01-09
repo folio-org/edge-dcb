@@ -13,7 +13,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.OffsetDateTime;
 
-import static org.folio.ed.utils.EntityUtils.*;
+import static org.folio.ed.utils.EntityUtils.createDcbTransaction;
+import static org.folio.ed.utils.EntityUtils.createDcbUpdateTransaction;
+import static org.folio.ed.utils.EntityUtils.createTransactionStatus;
+import static org.folio.ed.utils.EntityUtils.createTransactionStatusResponse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -52,9 +55,10 @@ class DcbTransactionServiceTest {
 
   @Test
   void updateDcbTransactionDetailsShouldThrowAnErrorIfClientReturnsError() {
+    DcbUpdateTransaction dcbUpdateTransaction = createDcbUpdateTransaction();
     doThrow(IllegalStateException.class).when(dcbClient).updateTransactionDetails(anyString(), any(DcbUpdateTransaction.class));
     assertThrows(IllegalStateException.class,
-      () -> dcbTransactionService.updateTransactionDetails("123", createDcbUpdateTransaction()));
+      () -> dcbTransactionService.updateTransactionDetails("123", dcbUpdateTransaction));
   }
 
   @Test
