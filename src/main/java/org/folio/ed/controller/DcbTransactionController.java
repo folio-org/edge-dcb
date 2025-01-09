@@ -1,6 +1,7 @@
 package org.folio.ed.controller;
 
 import org.folio.ed.domain.dto.DcbTransaction;
+import org.folio.ed.domain.dto.DcbUpdateTransaction;
 import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.ed.domain.dto.TransactionStatusResponse;
 import org.folio.ed.domain.dto.TransactionStatusResponseCollection;
@@ -45,5 +46,11 @@ public class DcbTransactionController implements TransactionsApi {
                                                                                       Integer pageNumber,Integer pageSize) {
     return ResponseEntity.status(HttpStatus.OK)
       .body(dcbTransactionService.getTransactionStatusList(fromDate, toDate, pageNumber, pageSize));
+  }
+
+  @Override
+  public ResponseEntity<Void> updateTransactionDetails(String dcbTransactionId, DcbUpdateTransaction dcbUpdateTransaction) {
+    dcbTransactionService.updateTransactionDetails(dcbTransactionId, dcbUpdateTransaction);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }
