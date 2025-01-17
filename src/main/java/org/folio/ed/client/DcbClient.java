@@ -5,6 +5,7 @@ import org.folio.ed.domain.dto.DcbTransaction;
 import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.ed.domain.dto.TransactionStatusResponse;
 import org.folio.ed.domain.dto.TransactionStatusResponseCollection;
+import org.folio.ed.domain.dto.DcbUpdateTransaction;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,4 +30,7 @@ public interface DcbClient {
   @GetMapping(value = "/status")
   TransactionStatusResponseCollection getTransactionStatusList(@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
                                                                @RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize);
+
+  @PutMapping(value = "/{dcbTransactionId}")
+  void updateTransactionDetails(@PathVariable("dcbTransactionId") String dcbTransactionId, @RequestBody DcbUpdateTransaction dcbUpdateTransaction);
 }

@@ -1,3 +1,7 @@
+## v1.2.2 - 2025-01-17
+
+* EDGEDCB-34 - Implement Put API for re-request
+
 ## v1.2.1 - 2024-11-20
 
 * Changes relate to TLS support
