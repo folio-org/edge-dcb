@@ -23,4 +23,7 @@ public interface DcbClient {
   @PutMapping(value = "/{dcbTransactionId}/status")
   TransactionStatusResponse updateTransactionStatus(@PathVariable("dcbTransactionId") String dcbTransactionId,
                                                                       @RequestBody TransactionStatus transactionStatus);
+
+  @PutMapping(value = "/{dcbTransactionId}")
+  void updateTransactionDetails(@PathVariable("dcbTransactionId") String dcbTransactionId, @RequestBody org.folio.ed.domain.dto.DcbUpdateTransaction dcbUpdateTransaction);
 }

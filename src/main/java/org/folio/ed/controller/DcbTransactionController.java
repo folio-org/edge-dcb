@@ -36,4 +36,10 @@ public class DcbTransactionController implements TransactionsApi {
     return ResponseEntity.status(HttpStatus.OK)
       .body(dcbTransactionService.updateDCBTransactionStatus(dcbTransactionId, transactionStatus));
   }
+
+  @Override
+  public ResponseEntity<Void> updateTransactionDetails(String dcbTransactionId, org.folio.ed.domain.dto.DcbUpdateTransaction dcbUpdateTransaction) {
+    dcbTransactionService.updateTransactionDetails(dcbTransactionId, dcbUpdateTransaction);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
 }
