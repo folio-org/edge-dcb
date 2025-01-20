@@ -10,13 +10,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.folio.ed.utils.EntityUtils.createDcbTransaction;
-import static org.folio.ed.utils.EntityUtils.createTransactionStatus;
-import static org.folio.ed.utils.EntityUtils.createTransactionStatusResponse;
+
+import static org.folio.ed.utils.EntityUtils.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.folio.ed.domain.dto.DcbUpdateTransaction;
 
 @ExtendWith(MockitoExtension.class)
 class DcbTransactionServiceTest {
@@ -45,5 +47,19 @@ class DcbTransactionServiceTest {
     Mockito.when(dcbClient.updateTransactionStatus(anyString(), any(TransactionStatus.class))).thenReturn(createTransactionStatusResponse(TransactionStatusResponse.StatusEnum.CREATED));
     dcbTransactionService.updateDCBTransactionStatus("123", createTransactionStatus(TransactionStatus.StatusEnum.OPEN));
     Mockito.verify(dcbClient).updateTransactionStatus(anyString(), any(TransactionStatus.class));
+  }
+
+  @Test
+  void updateDcbTransactionDetails() {
+    dcbTransactionService.updateTransactionDetails("123", createDcbUpdateTransaction());
+    verify(dcbClient).updateTransactionDetails(anyString(), any(DcbUpdateTransaction.class));
+  }
+
+  @Test
+  void updateDcbTransactionDetailsShouldThrowAnErrorIfClientReturnsError() {
+    org.folio.ed.domain.dto.DcbUpdateTransaction dcbUpdateTransaction = createDcbUpdateTransaction();
+    doThrow(IllegalStateException.class).when(dcbClient).updateTransactionDetails(anyString(), any(DcbUpdateTransaction.class));
+    assertThrows(IllegalStateException.class,
+      () -> dcbTransactionService.updateTransactionDetails("123", dcbUpdateTransaction));
   }
 }
