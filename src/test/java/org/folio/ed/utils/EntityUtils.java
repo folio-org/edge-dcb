@@ -5,6 +5,8 @@ import org.folio.ed.domain.dto.DcbPatron;
 import org.folio.ed.domain.dto.DcbTransaction;
 import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.ed.domain.dto.TransactionStatusResponse;
+import org.folio.ed.domain.dto.DcbUpdateTransaction;
+import org.folio.ed.domain.dto.DcbUpdateItem;
 
 public class EntityUtils {
 
@@ -44,5 +46,15 @@ public class EntityUtils {
 
   public static TransactionStatusResponse createTransactionStatusResponse(TransactionStatusResponse.StatusEnum statusEnum){
     return TransactionStatusResponse.builder().status(statusEnum).build();
+  }
+
+  public static org.folio.ed.domain.dto.DcbUpdateTransaction createDcbUpdateTransaction() {
+    return DcbUpdateTransaction.builder()
+      .item(DcbUpdateItem.builder()
+        .barcode(ITEM_ID)
+        .materialType("book")
+        .lendingLibraryCode("KU")
+        .build())
+      .build();
   }
 }

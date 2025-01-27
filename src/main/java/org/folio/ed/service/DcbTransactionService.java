@@ -30,4 +30,10 @@ public class DcbTransactionService {
     log.info("updateDCBTransactionStatus:: Updating status transaction for id: {} to {}", dcbTransactionId, transactionStatus.getStatus());
     return dcbClient.updateTransactionStatus(dcbTransactionId, transactionStatus);
   }
+
+  public void updateTransactionDetails(String dcbTransactionId, org.folio.ed.domain.dto.DcbUpdateTransaction dcbUpdateTransaction) {
+    log.info("updateTransactionDetails:: Updating transaction item details  for id: {} to {}", dcbTransactionId, dcbUpdateTransaction.getItem());
+    dcbClient.updateTransactionDetails(dcbTransactionId, dcbUpdateTransaction);
+  }
+
 }
