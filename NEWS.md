@@ -1,3 +1,7 @@
+## v1.1.5 - 2025-01-28
+
+* UXPROD-5001: Support DCB re-resolution
+
 ## v1.1.4 - 2024-11-20
 
 * EDGEDCB-33: Spring Boot 3.2.12 fixing tomcat HTTP/2 DoS CVE-2024-34750
