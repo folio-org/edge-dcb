@@ -24,6 +24,12 @@ public class DcbTransactionController implements TransactionsApi {
   private final DcbTransactionService dcbTransactionService;
 
   @Override
+  public ResponseEntity<TransactionStatusResponse> renewItemLoanByTransactionId(String dcbTransactionId) {
+    return ResponseEntity.status(HttpStatus.OK)
+      .body(dcbTransactionService.renewLoanByTransactionId(dcbTransactionId));
+  }
+
+  @Override
   public ResponseEntity<TransactionStatusResponse> getDCBTransactionStatusById(String dcbTransactionId) {
     return ResponseEntity.status(HttpStatus.OK)
       .body(dcbTransactionService.getDcbTransactionStatusById(dcbTransactionId));
@@ -53,4 +59,6 @@ public class DcbTransactionController implements TransactionsApi {
     dcbTransactionService.updateTransactionDetails(dcbTransactionId, dcbUpdateTransaction);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
+
+
 }

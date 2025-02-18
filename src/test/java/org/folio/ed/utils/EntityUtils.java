@@ -3,10 +3,12 @@ package org.folio.ed.utils;
 import org.folio.ed.domain.dto.DcbItem;
 import org.folio.ed.domain.dto.DcbPatron;
 import org.folio.ed.domain.dto.DcbTransaction;
+import org.folio.ed.domain.dto.DcbTransaction.RoleEnum;
 import org.folio.ed.domain.dto.DcbUpdateTransaction;
 import org.folio.ed.domain.dto.DcbUpdateItem;
 import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.ed.domain.dto.TransactionStatusResponse;
+import org.folio.ed.domain.dto.TransactionStatusResponse.StatusEnum;
 
 public class EntityUtils {
 
@@ -17,7 +19,7 @@ public class EntityUtils {
     return DcbTransaction.builder()
       .item(createDcbItem())
       .patron(createDcbPatron())
-      .role(DcbTransaction.RoleEnum.LENDER)
+      .role(RoleEnum.LENDER)
       .build();
   }
 
@@ -54,7 +56,15 @@ public class EntityUtils {
       .build();
   }
 
-  public static TransactionStatusResponse createTransactionStatusResponse(TransactionStatusResponse.StatusEnum statusEnum){
+  public static TransactionStatusResponse createTransactionStatusResponse(StatusEnum statusEnum){
     return TransactionStatusResponse.builder().status(statusEnum).build();
+  }
+
+  public static TransactionStatusResponse createTransactionStatusResponse(StatusEnum status,
+    TransactionStatusResponse.RoleEnum role) {
+    return TransactionStatusResponse.builder()
+      .status(status)
+      .role(role)
+      .build();
   }
 }
