@@ -140,7 +140,7 @@ class DcbEdgeRequestHandlingTest {
     setUpMockAuthnClient(TOKEN);
     // When we make a valid request to mod-dcb with the API key set
     mockDcbServer.enqueue(new MockResponse()
-      .setResponseCode(204)
+      .setResponseCode(200)
       .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
 
     var putResponse = mockMvc.perform(
@@ -157,7 +157,7 @@ class DcbEdgeRequestHandlingTest {
     assertThat(headers.get(XOkapiHeaders.TOKEN)).isEqualTo(TOKEN);
     assertThat(headers.get(XOkapiHeaders.USER_ID)).isNull();
     assertThat(putResponse.getContentAsString()).isEmpty();
-    assertThat(putResponse.getStatus()).isEqualTo(204);
+    assertThat(putResponse.getStatus()).isEqualTo(200);
   }
 
   @Test
