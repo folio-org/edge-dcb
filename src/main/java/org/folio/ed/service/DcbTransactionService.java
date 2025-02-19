@@ -47,4 +47,8 @@ public class DcbTransactionService {
     dcbClient.updateTransactionDetails(dcbTransactionId, dcbUpdateTransaction);
   }
 
+  public TransactionStatusResponse renewLoanByTransactionId(String dcbTransactionId) {
+    log.info("renewLoanByTransactionId:: Renewing loan for transaction id: {}", dcbTransactionId);
+    return dcbClient.renewLoanByTransactionId(dcbTransactionId);
+  }
 }
