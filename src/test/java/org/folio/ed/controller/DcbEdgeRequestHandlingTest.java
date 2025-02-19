@@ -48,10 +48,10 @@ import okhttp3.mockwebserver.MockWebServer;
 @AutoConfigureMockMvc
 class DcbEdgeRequestHandlingTest {
 
-  private final String TENANT = "test_tenant";
-  private final String USERNAME = "user";
-  private final String TOKEN = "This is totally a real test token!";
-  private final String TRANSACTION_ID = "123";
+  private static final String TENANT = "test_tenant";
+  private static final String USERNAME = "user";
+  private static final String TOKEN = "This is totally a real test token!";
+  private static final String TRANSACTION_ID = "123";
   protected static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().setSerializationInclusion(
       JsonInclude.Include.NON_NULL)
     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
