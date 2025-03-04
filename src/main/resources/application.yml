@@ -27,7 +27,7 @@ management:
         include: ${ACTUATOR_EXPOSURE:health,info,loggers}
   endpoint:
     loggers:
-      access: unrestricted
+      enabled: true
 feign:
   client:
     config:
