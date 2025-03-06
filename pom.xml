@@ -37,6 +37,7 @@
 
     <edge-dcb.yaml.file>src/main/resources/swagger.api/edge-dcb.yaml</edge-dcb.yaml.file>
     <sonar.exclusions>src/main/java/org/folio/ed/domain/**, src/main/java/org/folio/ed/EdgeDcbApplication.java</sonar.exclusions>
+    <spring-cloud-starter-openfeign.version>4.2.0</spring-cloud-starter-openfeign.version>
   </properties>
 
   <dependencies>
@@ -120,6 +121,11 @@
     <dependency>
       <groupId>org.springframework.integration</groupId>
       <artifactId>spring-integration-ip</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
+      <version>${spring-cloud-starter-openfeign.version}</version>
     </dependency>
 
     <dependency>
