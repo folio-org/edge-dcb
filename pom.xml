@@ -33,7 +33,6 @@
     <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
     <folio-spring-support.version>9.0.0</folio-spring-support.version>
     <mockwebserver.version>4.11.0</mockwebserver.version>
-    <commons-lang3.version>3.17.0</commons-lang3.version>
 
     <edge-dcb.yaml.file>src/main/resources/swagger.api/edge-dcb.yaml</edge-dcb.yaml.file>
     <sonar.exclusions>src/main/java/org/folio/ed/domain/**, src/main/java/org/folio/ed/EdgeDcbApplication.java</sonar.exclusions>
