@@ -1,3 +1,9 @@
+## v1.3.0 - 2025-03-14
+
+* EDGEDCB-45 - Added renewalPolicy fields.
+* EDGEDCB-41 - Create PUT /transaction/{dcbTransactionId}/renew API to allow the DCB hub to perform the renew operation
+* FOLIO-4228 - Java and spring upgrade for Sunflower
+
 ## v1.2.2 - 2025-01-17
 
 * EDGEDCB-34 - Implement Put API for re-request
