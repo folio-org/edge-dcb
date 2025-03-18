@@ -1,3 +1,8 @@
+## v1.2.3 - 2025-03-18
+
+* EDGEDCB-45 - New renewal policy for DCB items
+* EDGEDCB-41 - Implement PUT API for renewal PUT /transaction/{dcbTransactionId}/renew
+
 ## v1.2.2 - 2025-01-17
 
 * EDGEDCB-34 - Implement Put API for re-request

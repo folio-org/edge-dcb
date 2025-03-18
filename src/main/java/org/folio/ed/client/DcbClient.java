@@ -33,4 +33,7 @@ public interface DcbClient {
 
   @PutMapping(value = "/{dcbTransactionId}")
   void updateTransactionDetails(@PathVariable("dcbTransactionId") String dcbTransactionId, @RequestBody DcbUpdateTransaction dcbUpdateTransaction);
+
+  @PutMapping(value = "/{dcbTransactionId}/renew")
+  TransactionStatusResponse renewLoanByTransactionId(@PathVariable String dcbTransactionId);
 }
