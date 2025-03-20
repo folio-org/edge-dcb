@@ -19,6 +19,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.folio.ed.domain.dto.DcbUpdateTransaction;
+import static org.folio.ed.domain.dto.TransactionStatusResponse.RoleEnum.LENDER;
+import static org.folio.ed.domain.dto.TransactionStatusResponse.StatusEnum.ITEM_CHECKED_OUT;
 
 @ExtendWith(MockitoExtension.class)
 class DcbTransactionServiceTest {
@@ -61,5 +63,20 @@ class DcbTransactionServiceTest {
     doThrow(IllegalStateException.class).when(dcbClient).updateTransactionDetails(anyString(), any(DcbUpdateTransaction.class));
     assertThrows(IllegalStateException.class,
       () -> dcbTransactionService.updateTransactionDetails("123", dcbUpdateTransaction));
+  }
+
+  @Test
+  void renewLoanByTransactionIdTest() {
+    Mockito.when(dcbClient.renewLoanByTransactionId(anyString())).thenReturn(
+      createTransactionStatusResponse(ITEM_CHECKED_OUT, LENDER));
+    dcbTransactionService.renewLoanByTransactionId("123");
+    verify(dcbClient).renewLoanByTransactionId(anyString());
+  }
+
+  @Test
+  void renewLoanByTransactionIdShouldThrowAnErrorIfClientReturnsError() {
+    doThrow(IllegalArgumentException.class).when(dcbClient).renewLoanByTransactionId(anyString());
+    assertThrows(IllegalArgumentException.class,
+      () -> dcbTransactionService.renewLoanByTransactionId("123"));
   }
 }

@@ -40,13 +40,40 @@ import lombok.SneakyThrows;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.folio.ed.utils.EntityUtils.createDcbTransaction;
+import static org.folio.ed.utils.EntityUtils.createDcbUpdateTransaction;
+import static org.folio.ed.utils.EntityUtils.createTransactionStatus;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
+import java.io.IOException;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.SneakyThrows;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class DcbEdgeRequestHandlingTest {
 
-  private final String TENANT = "test_tenant", USERNAME = "user", TOKEN = "This is totally a real test token!", TRANSACTION_ID = "123";
-  protected static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)
-    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+  private static final String TENANT = "test_tenant";
+  private static final String USERNAME = "user";
+  private static final String TOKEN = "This is totally a real test token!";
+  private static final String TRANSACTION_ID = "123";
+  protected static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().setSerializationInclusion(
+      JsonInclude.Include.NON_NULL)  .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 
   @Autowired
@@ -82,8 +109,9 @@ class DcbEdgeRequestHandlingTest {
       .setResponseCode(200)
       .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody(responseBody));
-    var getResponse = mockMvc.perform(get("/dcbService/transactions/{transactionId}/status?apiKey={apiKey}", TRANSACTION_ID, apiKey)
-      .contentType(MediaType.APPLICATION_JSON))
+    var getResponse = mockMvc.perform(
+        get("/dcbService/transactions/{transactionId}/status?apiKey={apiKey}", TRANSACTION_ID, apiKey)
+          .contentType(MediaType.APPLICATION_JSON))
       .andReturn()
       .getResponse();
     // Then the outgoing response from the edge API should contain the Okapi auth headers and the response body should
@@ -106,10 +134,11 @@ class DcbEdgeRequestHandlingTest {
       .setResponseCode(201)
       .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody(responseBody));
-    var postResponse = mockMvc.perform(post("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
-        .content(asJsonString(createDcbTransaction()))
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+    var postResponse = mockMvc.perform(
+        post("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
+          .content(asJsonString(createDcbTransaction()))
+          .contentType(MediaType.APPLICATION_JSON)
+          .accept(MediaType.APPLICATION_JSON))
       .andReturn()
       .getResponse();
 
@@ -135,10 +164,11 @@ class DcbEdgeRequestHandlingTest {
       .setResponseCode(201)
       .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody(responseBody));
-    var postResponse = mockMvc.perform(post("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
-        .content(asJsonString(dcbTransaction + "\"role\" : \"\test\""))
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+    var postResponse = mockMvc.perform(
+        post("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
+          .content(asJsonString(dcbTransaction + "\"role\" : \"\"test\""))
+          .contentType(MediaType.APPLICATION_JSON)
+          .accept(MediaType.APPLICATION_JSON))
       .andReturn()
       .getResponse();
 
@@ -158,14 +188,43 @@ class DcbEdgeRequestHandlingTest {
       .setResponseCode(201)
       .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody(responseBody));
-    var postResponse = mockMvc.perform(post("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
-        .content(asJsonString(dcbTransaction ))
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+    var postResponse = mockMvc.perform(
+        post("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
+          .content(asJsonString(dcbTransaction))
+          .contentType(MediaType.APPLICATION_JSON)
+          .accept(MediaType.APPLICATION_JSON))
       .andReturn()
       .getResponse();
 
     assertThat(postResponse.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldConvertApiKeyToHeadersForRenewItemLoanByTransactionId() {
+    // Given
+    var apiKey = ApiKeyUtils.generateApiKey(10, TENANT, USERNAME);
+    setUpMockAuthnClient(TOKEN);
+    // When we make a valid request to mod-dcb with the API key set
+    mockDcbServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
+
+    var putResponse = mockMvc.perform(
+        put("/dcbService/transactions/{transactionId}/renew?apiKey={apiKey}",
+          TRANSACTION_ID, apiKey)
+          .content(asJsonString(createDcbUpdateTransaction()))
+          .contentType(MediaType.APPLICATION_JSON)
+          .accept(MediaType.APPLICATION_JSON))
+      .andReturn()
+      .getResponse();
+
+    var headers = mockDcbServer.takeRequest().getHeaders();
+    assertThat(headers.get(XOkapiHeaders.TENANT)).isEqualTo(TENANT);
+    assertThat(headers.get(XOkapiHeaders.TOKEN)).isEqualTo(TOKEN);
+    assertThat(headers.get(XOkapiHeaders.USER_ID)).isNull();
+    assertThat(putResponse.getContentAsString()).isEmpty();
+    assertThat(putResponse.getStatus()).isEqualTo(200);
   }
 
   @Test
@@ -183,17 +242,21 @@ class DcbEdgeRequestHandlingTest {
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(404)
       .setBody(asJsonString(errors)));
-    var postResponse = mockMvc.perform(post("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
-        .content(asJsonString(dcbTransaction))
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+    var postResponse = mockMvc.perform(
+        post("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
+          .content(asJsonString(dcbTransaction))
+          .contentType(MediaType.APPLICATION_JSON)
+          .accept(MediaType.APPLICATION_JSON))
       .andReturn()
       .getResponse();
     // As dcb will return Error message of type Errors, trying to assert the same here
-    var errorMessage = new ObjectMapper().readValue(postResponse.getContentAsString(), org.folio.ed.domain.dto.Errors.class);
+    var errorMessage = new ObjectMapper().readValue(postResponse.getContentAsString(),
+      org.folio.ed.domain.dto.Errors.class);
+
 
     assertThat(postResponse.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
-    assertThat(errorMessage.getErrors().get(0).getMessage()).contains("Unable to find Dcb transaction");
+    assertThat(errorMessage.getErrors().get(0).getMessage()).contains(
+      "Unable to find Dcb transaction");
   }
 
   @Test
@@ -212,10 +275,12 @@ class DcbEdgeRequestHandlingTest {
       .setResponseCode(204)
       .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody(responseBody));
-    var putResponse = mockMvc.perform(put("/dcbService/transactions/{transactionId}/status?apiKey={apiKey}", transactionId, apiKey)
-        .content(asJsonString(createTransactionStatus(TransactionStatus.StatusEnum.AWAITING_PICKUP)))
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+    var putResponse = mockMvc.perform(
+        put("/dcbService/transactions/{transactionId}/status?apiKey={apiKey}", transactionId, apiKey)
+          .content(
+            asJsonString(createTransactionStatus(TransactionStatus.StatusEnum.AWAITING_PICKUP)))
+          .contentType(MediaType.APPLICATION_JSON)
+          .accept(MediaType.APPLICATION_JSON))
       .andReturn()
       .getResponse();
 
@@ -226,6 +291,32 @@ class DcbEdgeRequestHandlingTest {
     assertThat(headers.get(XOkapiHeaders.TOKEN)).isEqualTo(token);
     assertThat(headers.get(XOkapiHeaders.USER_ID)).isNull();
     assertThat(putResponse.getContentAsString()).isEqualTo(responseBody);
+  }
+
+  @Test
+  void shouldReturnClientErrorsWhenRenewLoanByTransactionId() throws Exception {
+    // Given
+    var apiKey = ApiKeyUtils.generateApiKey(10, TENANT, USERNAME);
+    var dcbResponseCode = HttpStatus.I_AM_A_TEAPOT.value(); // Arbitrary HTTP error status code
+    var dcbResponseBody = "I'm a teapot!";
+    setUpMockAuthnClient(TOKEN);
+
+    // When mod-dcb responds with an error
+    mockDcbServer.enqueue(new MockResponse()
+      .setResponseCode(dcbResponseCode)
+      .setBody(dcbResponseBody));
+    var putResponse = mockMvc.perform(put(
+        "/dcbService/transactions/{transactionId}/renew?apiKey={apiKey}",
+        TRANSACTION_ID, apiKey)
+        .content(asJsonString(createDcbUpdateTransaction()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+      .andReturn()
+      .getResponse();
+
+    // If mod-dcb doesn't return the error of type errors, then we edge-dcb will throw INTERNAL_SERVER_ERROR
+    assertThat(putResponse.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
+    assertThat(putResponse.getContentAsString()).contains(dcbResponseBody);
   }
 
   @Test
@@ -269,10 +360,11 @@ class DcbEdgeRequestHandlingTest {
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(204)
       .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
-    var putResponse = mockMvc.perform(put("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
-        .content(asJsonString(createDcbUpdateTransaction()))
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+    var putResponse = mockMvc.perform(
+        put("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
+          .content(asJsonString(createDcbUpdateTransaction()))
+          .contentType(MediaType.APPLICATION_JSON)
+          .accept(MediaType.APPLICATION_JSON))
       .andReturn()
       .getResponse();
 
