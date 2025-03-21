@@ -1,3 +1,7 @@
+## v1.1.6 2025-03-21
+
+* UXPROD-5116: Support DCB virtual item renewal in FOLIO
+
 ## v1.1.5 - 2025-01-28
 
 * UXPROD-5001: Support DCB re-resolution

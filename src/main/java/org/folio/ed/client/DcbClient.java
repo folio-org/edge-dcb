@@ -26,4 +26,7 @@ public interface DcbClient {
 
   @PutMapping(value = "/{dcbTransactionId}")
   void updateTransactionDetails(@PathVariable("dcbTransactionId") String dcbTransactionId, @RequestBody org.folio.ed.domain.dto.DcbUpdateTransaction dcbUpdateTransaction);
+
+  @PutMapping(value = "/{dcbTransactionId}/renew")
+  TransactionStatusResponse renewLoanByTransactionId(@PathVariable String dcbTransactionId);
 }
