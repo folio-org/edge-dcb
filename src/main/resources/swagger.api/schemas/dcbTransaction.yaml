@@ -7,6 +7,9 @@ DcbTransaction:
         $ref: 'dcbPatron.yaml#/DcbPatron'
       pickup:
         $ref: 'dcbPickup.yaml#/DcbPickup'
+      selfBorrowing:
+        description: selfBorrowing flag for BORROWING_PICKUP role to allow patrons to request items from own library via DCB
+        type: boolean
       role:
         type: string
         enum:
