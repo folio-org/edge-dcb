@@ -1,4 +1,8 @@
-## v1.3.0 - 2025-03-XX
+## v1.3.1 - 2025-06-18
+
+* EDGEDCB-52 - Allow patrons to request items from own library via DCB
+
+## v1.3.0 - 2025-03-14
 
 * EDGEDCB-45 - Added renewalPolicy fields.
 * EDGEDCB-41 - Create PUT /transaction/{dcbTransactionId}/renew API to allow the DCB hub to perform the renew operation
