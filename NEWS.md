@@ -1,3 +1,7 @@
+## v1.2.4 - 2025-06-19
+
+* EDGEDCB-52 - Allow patrons to request items from own library via DCB
+
 ## v1.2.3 - 2025-03-18
 
 * EDGEDCB-45 - New renewal policy for DCB items
