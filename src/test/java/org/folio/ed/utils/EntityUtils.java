@@ -44,6 +44,7 @@ public class EntityUtils {
       .title("ITEM")
       .lendingLibraryCode("KU")
       .materialType("book")
+      .locationCode("KU/CC/DI/O")
       .build();
   }
 
