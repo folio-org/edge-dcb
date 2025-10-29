@@ -1,3 +1,7 @@
+## v1.3.2 - 2025-10-29
+
+* EDGEDCB-58 - Add localNames field for DCB patron
+
 ## v1.3.1 - 2025-06-18
 
 * EDGEDCB-52 - Allow patrons to request items from own library via DCB
