@@ -53,6 +53,7 @@ public class EntityUtils {
       .barcode("DCB_PATRON")
       .group("staff")
       .borrowingLibraryCode("E")
+      .localNames("[John, Smith]")
       .build();
   }
 
