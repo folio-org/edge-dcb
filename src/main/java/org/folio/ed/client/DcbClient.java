@@ -36,4 +36,10 @@ public interface DcbClient {
 
   @PutMapping(value = "/{dcbTransactionId}/renew")
   TransactionStatusResponse renewLoanByTransactionId(@PathVariable String dcbTransactionId);
+
+  @PutMapping("/{dcbTransactionId}/block-renewal")
+  void blockItemRenewalByTransactionId(@PathVariable("dcbTransactionId") String dcbTransactionId);
+
+  @PutMapping("/{dcbTransactionId}/unblock-renewal")
+  void unblockItemRenewalByTransactionId(@PathVariable("dcbTransactionId") String dcbTransactionId);
 }
