@@ -60,5 +60,15 @@ public class DcbTransactionController implements TransactionsApi {
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
+  @Override
+  public ResponseEntity<Void> blockItemRenewalByTransactionId(String dcbTransactionId) {
+    dcbTransactionService.blockItemRenewalByTransactionId(dcbTransactionId);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
 
+  @Override
+  public ResponseEntity<Void> unblockItemRenewalByTransactionId(String dcbTransactionId) {
+    dcbTransactionService.unblockItemRenewalByTransactionId(dcbTransactionId);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
 }
