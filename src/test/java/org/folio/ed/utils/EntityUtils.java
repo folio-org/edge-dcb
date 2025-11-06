@@ -34,7 +34,9 @@ public class EntityUtils {
   }
 
   public static TransactionStatus createTransactionStatus(TransactionStatus.StatusEnum statusEnum){
-    return TransactionStatus.builder().status(statusEnum).build();
+    return TransactionStatus.builder()
+      .status(statusEnum)
+      .build();
   }
 
   public static DcbItem createDcbItem() {

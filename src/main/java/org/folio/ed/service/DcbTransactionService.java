@@ -6,6 +6,8 @@ import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.ed.domain.dto.TransactionStatusResponse;
 import org.folio.ed.domain.dto.TransactionStatusResponseCollection;
 import org.folio.ed.domain.dto.DcbUpdateTransaction;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -50,5 +52,13 @@ public class DcbTransactionService {
   public TransactionStatusResponse renewLoanByTransactionId(String dcbTransactionId) {
     log.info("renewLoanByTransactionId:: Renewing loan for transaction id: {}", dcbTransactionId);
     return dcbClient.renewLoanByTransactionId(dcbTransactionId);
+  }
+
+  public void blockItemRenewalByTransactionId(String dcbTransactionId) {
+    dcbClient.blockItemRenewalByTransactionId(dcbTransactionId);
+  }
+
+  public void unblockItemRenewalByTransactionId(String dcbTransactionId) {
+    dcbClient.unblockItemRenewalByTransactionId(dcbTransactionId);
   }
 }
