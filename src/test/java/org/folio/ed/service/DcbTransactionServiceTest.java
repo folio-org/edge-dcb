@@ -1,5 +1,6 @@
 package org.folio.ed.service;
 
+import java.util.UUID;
 import org.folio.ed.client.DcbClient;
 import org.folio.ed.domain.dto.DcbTransaction;
 import org.folio.ed.domain.dto.DcbUpdateTransaction;
@@ -91,5 +92,19 @@ class DcbTransactionServiceTest {
     var endDate = OffsetDateTime.now();
     dcbTransactionService.getTransactionStatusList(startDate, endDate, 0, 100);
     verify(dcbClient).getTransactionStatusList(startDate.toString(), endDate.toString(), 0, 100);
+  }
+
+  @Test
+  void blockItemRenewalByTransactionIdTest() {
+    var transactionId = UUID.randomUUID().toString();
+    dcbTransactionService.blockItemRenewalByTransactionId(transactionId);
+    verify(dcbClient).blockItemRenewalByTransactionId(transactionId);
+  }
+
+  @Test
+  void unblockItemRenewalByTransactionIdTest() {
+    var transactionId = UUID.randomUUID().toString();
+    dcbTransactionService.unblockItemRenewalByTransactionId(transactionId);
+    verify(dcbClient).unblockItemRenewalByTransactionId(transactionId);
   }
 }

@@ -1,6 +1,7 @@
 package org.folio.ed.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.folio.ed.utils.EntityUtils.createDcbItem;
 import static org.folio.ed.utils.EntityUtils.createDcbTransaction;
 import static org.folio.ed.utils.EntityUtils.createDcbUpdateTransaction;
 import static org.folio.ed.utils.EntityUtils.createTransactionStatus;
@@ -9,6 +10,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.folio.ed.domain.dto.TransactionStatus;
+import org.folio.ed.domain.dto.TransactionStatusResponse;
 import org.folio.edge.core.utils.ApiKeyUtils;
 import org.folio.edgecommonspring.client.EdgeFeignClientProperties;
 import org.folio.spring.integration.XOkapiHeaders;
@@ -335,6 +338,34 @@ class DcbEdgeRequestHandlingTest {
   }
 
   @Test
+  void shouldReturnTransactionStatusById() throws Exception {
+    var apiKey = ApiKeyUtils.generateApiKey(10, TENANT, USERNAME);
+    var dcbResponseCode = HttpStatus.OK.value(); // Arbitrary HTTP error status code
+    setUpMockAuthnClient(TOKEN);
+
+    var statusResponse = new TransactionStatusResponse()
+      .role(TransactionStatusResponse.RoleEnum.LENDER)
+      .status(TransactionStatusResponse.StatusEnum.ITEM_CHECKED_OUT)
+      .item(createDcbItem().holdCount(10));
+
+    var dcbResponseBody = asJsonString(statusResponse);
+
+    mockDcbServer.enqueue(new MockResponse()
+      .setResponseCode(dcbResponseCode)
+      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+      .setBody(dcbResponseBody));
+
+    var response = mockMvc.perform(get("/dcbService/transactions/{transactionId}/status", TRANSACTION_ID)
+        .queryParam("apiKey", apiKey)
+        .contentType(MediaType.APPLICATION_JSON))
+      .andReturn()
+      .getResponse();
+
+    assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    assertThat(response.getContentAsString()).contains(dcbResponseBody);
+  }
+
+  @Test
   void shouldReturnClientErrors() throws Exception {
     // Given
     var apiKey = ApiKeyUtils.generateApiKey(10, TENANT, USERNAME);
@@ -385,11 +416,6 @@ class DcbEdgeRequestHandlingTest {
       .thenReturn(new UserToken(token, Instant.now().plus(1, TimeUnit.HOURS.toChronoUnit())));
   }
 
-  @SneakyThrows
-  public static String asJsonString(Object value) {
-    return OBJECT_MAPPER.writeValueAsString(value);
-  }
-
   @Test
   void shouldReturnClientErrorsWhenRenewLoanByTransactionId() throws Exception {
     // Given
@@ -414,5 +440,38 @@ class DcbEdgeRequestHandlingTest {
     // If mod-dcb doesn't return the error of type errors, then we edge-dcb will throw INTERNAL_SERVER_ERROR
     assertThat(putResponse.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
     assertThat(putResponse.getContentAsString()).contains(dcbResponseBody);
+  }
+
+  @Test
+  void shouldBlockItemRenewalByTransactionId() throws Exception {
+    var dcbResponseCode = HttpStatus.NO_CONTENT.value(); // Arbitrary HTTP error status code
+    setUpMockAuthnClient(TOKEN);
+
+    mockDcbServer.enqueue(new MockResponse().setResponseCode(dcbResponseCode));
+    mockMvc.perform(put("/dcbService/transactions/{transactionId}/block-renewal", TRANSACTION_ID)
+        .queryParam("apiKey", ApiKeyUtils.generateApiKey(10, TENANT, USERNAME))
+        .content(asJsonString(createDcbUpdateTransaction()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+      .andExpect(status().isNoContent());
+  }
+
+  @Test
+  void shouldUnblockItemRenewalByTransactionId() throws Exception {
+    var dcbResponseCode = HttpStatus.NO_CONTENT.value(); // Arbitrary HTTP error status code
+    setUpMockAuthnClient(TOKEN);
+
+    mockDcbServer.enqueue(new MockResponse().setResponseCode(dcbResponseCode));
+    mockMvc.perform(put("/dcbService/transactions/{transactionId}/unblock-renewal", TRANSACTION_ID)
+        .queryParam("apiKey", ApiKeyUtils.generateApiKey(10, TENANT, USERNAME))
+        .content(asJsonString(createDcbUpdateTransaction()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+      .andExpect(status().isNoContent());
+  }
+
+  @SneakyThrows
+  public static String asJsonString(Object value) {
+    return OBJECT_MAPPER.writeValueAsString(value);
   }
 }
