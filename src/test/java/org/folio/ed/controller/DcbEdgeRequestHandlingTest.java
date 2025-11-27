@@ -108,6 +108,27 @@ class DcbEdgeRequestHandlingTest {
   }
 
   @Test
+  void getExpiredTransactionStatus() throws Exception {
+    var apiKey = ApiKeyUtils.generateApiKey(10, TENANT, USERNAME);
+    setUpMockAuthnClient(TOKEN);
+
+    mockDcbServer.enqueue(new MockResponse()
+      .setResponseCode(200)
+      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+      .setBody("{\"status\":\"EXPIRED\"}"));
+
+    var response = mockMvc.perform(
+        get("/dcbService/transactions/{transactionId}/status", TRANSACTION_ID)
+          .queryParam("apiKey", apiKey)
+          .contentType(MediaType.APPLICATION_JSON))
+      .andReturn()
+      .getResponse();
+
+    var body = OBJECT_MAPPER.readValue(response.getContentAsString(), TransactionStatusResponse.class);
+    assertThat(body.getStatus()).isEqualTo(TransactionStatusResponse.StatusEnum.EXPIRED);
+  }
+
+  @Test
   void shouldConvertApiKeyToHeadersForPost() throws Exception {
     // Given
     var apiKey = ApiKeyUtils.generateApiKey(10, TENANT, USERNAME);
