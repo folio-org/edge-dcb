@@ -5,6 +5,7 @@
 ## v1.3.2 - 2025-10-29
 
 * EDGEDCB-58 - Add localNames field for DCB patron
+* EDGEDCB-65 - Add new transaction status: EXPIRED
 
 ## v1.3.1 - 2025-06-18
 
