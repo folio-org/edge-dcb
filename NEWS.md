@@ -1,6 +1,7 @@
 ## v1.4.0 - In progress
 * EDGEDCB-58 - Add localNames field for DCB patron
 * EDGEDCB-65 - Add new transaction status: EXPIRED
+* EDGEDCB-68 - Proxy request to refresh shadow locations
 
 ## v1.3.0 - 2025-03-14
 

@@ -1,11 +1,19 @@
 package org.folio.ed.utils;
 
+import static org.folio.ed.domain.dto.RefreshLocationStatusType.SUCCESS;
+
+import org.folio.ed.domain.dto.DcbAgency;
 import org.folio.ed.domain.dto.DcbItem;
+import org.folio.ed.domain.dto.DcbLocation;
 import org.folio.ed.domain.dto.DcbPatron;
 import org.folio.ed.domain.dto.DcbTransaction;
 import org.folio.ed.domain.dto.DcbTransaction.RoleEnum;
 import org.folio.ed.domain.dto.DcbUpdateTransaction;
 import org.folio.ed.domain.dto.DcbUpdateItem;
+import org.folio.ed.domain.dto.RefreshLocationStatus;
+import org.folio.ed.domain.dto.RefreshLocationUnitsStatus;
+import org.folio.ed.domain.dto.RefreshShadowLocationResponse;
+import org.folio.ed.domain.dto.ShadowLocationRefreshBody;
 import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.ed.domain.dto.TransactionStatusResponse;
 import org.folio.ed.domain.dto.TransactionStatusResponse.StatusEnum;
@@ -70,5 +78,20 @@ public class EntityUtils {
       .status(status)
       .role(role)
       .build();
+  }
+
+  public static ShadowLocationRefreshBody shadowLocationRefreshBody() {
+    var agency = new DcbAgency().name("test-agency").code("AG");
+    var location = new DcbLocation().name("test").code("T-1").agency(agency);
+    return new ShadowLocationRefreshBody().addLocationsItem(location);
+  }
+
+  public static RefreshShadowLocationResponse shadowLocationRefreshResponse() {
+    return new RefreshShadowLocationResponse()
+      .addLocationsItem(new RefreshLocationStatus().code("T-1").status(SUCCESS))
+      .locationUnits(new RefreshLocationUnitsStatus()
+        .addInstitutionsItem(new RefreshLocationStatus().code("AG").status(SUCCESS))
+        .addCampusesItem(new RefreshLocationStatus().code("AG").status(SUCCESS))
+        .addLibrariesItem(new RefreshLocationStatus().code("AG").status(SUCCESS)));
   }
 }
