@@ -1,6 +1,7 @@
 ## v1.3.4 - 2025-12-09
 
 * EDGEDCB-65 - Add new transaction status: EXPIRED
+* EDGEDCB-68 - Proxy request to refresh shadow locations
 
 ## v1.3.3 - 2025-11-18
 
