@@ -5,11 +5,17 @@ import static org.folio.ed.utils.EntityUtils.createDcbItem;
 import static org.folio.ed.utils.EntityUtils.createDcbTransaction;
 import static org.folio.ed.utils.EntityUtils.createDcbUpdateTransaction;
 import static org.folio.ed.utils.EntityUtils.createTransactionStatus;
+import static org.folio.ed.utils.EntityUtils.shadowLocationRefreshBody;
+import static org.folio.ed.utils.EntityUtils.shadowLocationRefreshResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
@@ -32,7 +38,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -91,7 +96,7 @@ class DcbEdgeRequestHandlingTest {
     // When we make a valid request to mod-dcb with the API key set
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(200)
-      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+      .setHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody(responseBody));
     var getResponse = mockMvc.perform(
         get("/dcbService/transactions/{transactionId}/status?apiKey={apiKey}", TRANSACTION_ID, apiKey)
@@ -114,7 +119,7 @@ class DcbEdgeRequestHandlingTest {
 
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(200)
-      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+      .setHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody("{\"status\":\"EXPIRED\"}"));
 
     var response = mockMvc.perform(
@@ -137,7 +142,7 @@ class DcbEdgeRequestHandlingTest {
     // When we make a valid request to mod-dcb with the API key set
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(201)
-      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+      .setHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody(responseBody));
     var postResponse = mockMvc.perform(
         post("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
@@ -165,7 +170,7 @@ class DcbEdgeRequestHandlingTest {
     // When we make a valid request to mod-dcb with the API key set
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(200)
-      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
+      .setHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON));
 
     var putResponse = mockMvc.perform(
         put("/dcbService/transactions/{transactionId}/renew?apiKey={apiKey}",
@@ -192,7 +197,7 @@ class DcbEdgeRequestHandlingTest {
     // When we make a valid request to mod-dcb with the API key set
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(204)
-      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
+      .setHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON));
     var putResponse = mockMvc.perform(
         put("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
           .content(asJsonString(createDcbUpdateTransaction()))
@@ -222,7 +227,7 @@ class DcbEdgeRequestHandlingTest {
     // When we make a valid request to mod-dcb with the API key set
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(201)
-      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+      .setHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody(responseBody));
     var postResponse = mockMvc.perform(
         post("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
@@ -246,7 +251,7 @@ class DcbEdgeRequestHandlingTest {
     // When we make a valid request to mod-dcb with the API key set
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(201)
-      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+      .setHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody(responseBody));
     var postResponse = mockMvc.perform(
         post("/dcbService/transactions/{transactionId}?apiKey={apiKey}", TRANSACTION_ID, apiKey)
@@ -304,7 +309,7 @@ class DcbEdgeRequestHandlingTest {
     // When we make a valid request to mod-dcb with the API key set
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(204)
-      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+      .setHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody(responseBody));
     var putResponse = mockMvc.perform(
         put("/dcbService/transactions/{transactionId}/status?apiKey={apiKey}", transactionId, apiKey)
@@ -337,7 +342,7 @@ class DcbEdgeRequestHandlingTest {
     // When we make a valid request to mod-dcb with the API key set
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(204)
-      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+      .setHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody(responseBody));
     var startDate = OffsetDateTime.now(ZoneOffset.UTC);
     var endDate = OffsetDateTime.now(ZoneOffset.UTC);
@@ -373,7 +378,7 @@ class DcbEdgeRequestHandlingTest {
 
     mockDcbServer.enqueue(new MockResponse()
       .setResponseCode(dcbResponseCode)
-      .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+      .setHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON)
       .setBody(dcbResponseBody));
 
     var response = mockMvc.perform(get("/dcbService/transactions/{transactionId}/status", TRANSACTION_ID)
@@ -465,7 +470,7 @@ class DcbEdgeRequestHandlingTest {
 
   @Test
   void shouldBlockItemRenewalByTransactionId() throws Exception {
-    var dcbResponseCode = HttpStatus.NO_CONTENT.value(); // Arbitrary HTTP error status code
+    var dcbResponseCode = HttpStatus.NO_CONTENT.value();
     setUpMockAuthnClient(TOKEN);
 
     mockDcbServer.enqueue(new MockResponse().setResponseCode(dcbResponseCode));
@@ -479,7 +484,7 @@ class DcbEdgeRequestHandlingTest {
 
   @Test
   void shouldUnblockItemRenewalByTransactionId() throws Exception {
-    var dcbResponseCode = HttpStatus.NO_CONTENT.value(); // Arbitrary HTTP error status code
+    var dcbResponseCode = HttpStatus.NO_CONTENT.value();
     setUpMockAuthnClient(TOKEN);
 
     mockDcbServer.enqueue(new MockResponse().setResponseCode(dcbResponseCode));
@@ -489,6 +494,39 @@ class DcbEdgeRequestHandlingTest {
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
       .andExpect(status().isNoContent());
+  }
+
+  @Test
+  void shouldRefreshShadowLocations() throws Exception {
+    var dcbResponseCode = HttpStatus.CREATED.value();
+    setUpMockAuthnClient(TOKEN);
+
+    var refreshResponse = shadowLocationRefreshResponse();
+    var response = new MockResponse()
+      .setResponseCode(dcbResponseCode)
+      .setHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+      .setBody(asJsonString(refreshResponse));
+
+    mockDcbServer.enqueue(response);
+    mockMvc.perform(post("/dcbService/dcb/shadow-locations/refresh")
+        .queryParam("apiKey", ApiKeyUtils.generateApiKey(10, TENANT, USERNAME))
+        .content(asJsonString(shadowLocationRefreshBody()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+      .andExpect(status().isCreated())
+      .andExpect(content().json(asJsonString(refreshResponse)));
+  }
+
+  @Test
+  void shouldRefreshShadowLocationsEmptyRequestBody() throws Exception {
+    setUpMockAuthnClient(TOKEN);
+
+    mockMvc.perform(post("/dcbService/dcb/shadow-locations/refresh")
+        .queryParam("apiKey", ApiKeyUtils.generateApiKey(10, TENANT, USERNAME))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+      .andExpect(status().isBadRequest())
+      .andExpect(jsonPath("$.errors[0].code").value("VALIDATION_ERROR"));
   }
 
   @SneakyThrows
