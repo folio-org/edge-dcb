@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.7</version>
+    <version>4.0.0</version>
     <relativePath />
   </parent>
 
@@ -30,13 +30,13 @@
     <awaitility.version>4.3.0</awaitility.version>
     <copy-rename-maven-plugin.version>1.0.1</copy-rename-maven-plugin.version>
     <openapi-generator-maven-plugin.version>7.17.0</openapi-generator-maven-plugin.version>
-    <maven-release-plugin.version>3.2.0</maven-release-plugin.version>
+    <maven-release-plugin.version>3.3.0</maven-release-plugin.version>
     <folio-spring-support.version>9.1.0</folio-spring-support.version>
     <mockwebserver.version>4.12.0</mockwebserver.version>
 
     <edge-dcb.yaml.file>src/main/resources/swagger.api/edge-dcb.yaml</edge-dcb.yaml.file>
     <sonar.exclusions>src/main/java/org/folio/ed/domain/**, src/main/java/org/folio/ed/EdgeDcbApplication.java</sonar.exclusions>
-    <spring-cloud-starter-openfeign.version>4.3.0</spring-cloud-starter-openfeign.version>
+    <spring-cloud-starter-openfeign.version>5.0.0</spring-cloud-starter-openfeign.version>
   </properties>
 
   <dependencies>
