@@ -1,3 +1,7 @@
+## v1.3.4 - 2025-12-09
+
+* EDGEDCB-65 - Add new transaction status: EXPIRED
+
 ## v1.3.3 - 2025-11-18
 
 * EDGEDCB-61 - Add hold count field to transaction status response and renewal block toggle for virtual items
