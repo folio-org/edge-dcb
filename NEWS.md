@@ -1,3 +1,8 @@
+## 1.3.5 - 2025-12-10
+
+* EDGEDCB-53 - Populate locationCode for DCB Transaction API
+* EDGEDCB-68 - Add request body for `POST /dcb/shadow-locations/refresh`
+
 ## v1.3.4 - 2025-12-09
 
 * EDGEDCB-65 - Add new transaction status: EXPIRED

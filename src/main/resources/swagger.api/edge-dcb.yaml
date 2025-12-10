@@ -145,6 +145,24 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /dcb/shadow-locations/refresh:
+    description: dcb hub shadow location refresh endpoint
+    post:
+      requestBody:
+        $ref: "#/components/requestBodies/ShadowLocationRefreshBody"
+      tags:
+        - RefreshShadowLocations
+      description: Refresh shadow location
+      operationId: refreshShadowLocation
+      responses:
+        '201':
+          $ref: '#/components/responses/RefreshShadowLocationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
 components:
   requestBodies:
@@ -168,6 +186,13 @@ components:
         application/json:
           schema:
             $ref: "schemas/dcbUpdateTransaction.yaml#/DcbUpdateTransaction"
+    ShadowLocationRefreshBody:
+      description: DCB hub shadow location refresh request body
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: 'schemas/ShadowLocationRefreshBody.yaml#/ShadowLocationRefreshBody'
   responses:
     TransactionStatus:
       description: Transaction Status object
@@ -187,6 +212,12 @@ components:
         application/json:
           schema:
             $ref: "schemas/transactionStatusResponse.yaml#/TransactionStatusResponseCollection"
+    RefreshShadowLocationResponse:
+      description: DCB hub shadow location refresh response
+      content:
+        application/json:
+          schema:
+            $ref: "schemas/refreshShadowLocationResponse.yaml#/RefreshShadowLocationResponse"
     NotFound:
       description: Resource not found
       content:
