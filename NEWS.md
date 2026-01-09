@@ -1,3 +1,7 @@
+## 1.3.6 - 2026-01-09
+
+* EDGEDCB-69 - Spring Boot 3.4.13 fixing vulns
+
 ## 1.3.5 - 2025-12-10
 
 * EDGEDCB-53 - Populate locationCode for DCB Transaction API
