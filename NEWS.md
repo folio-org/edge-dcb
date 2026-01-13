@@ -1,3 +1,7 @@
+## v1.2.5 - 2026-01-08
+
+* EDGEDCB-70 - Netty 4.1.130, Tomcat 10.1.50 fixing vulns
+
 ## v1.2.4 - 2025-06-19
 
 * EDGEDCB-52 - Allow patrons to request items from own library via DCB
