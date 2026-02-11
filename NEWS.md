@@ -2,6 +2,7 @@
 * EDGEDCB-58 - Add localNames field for DCB patron
 * EDGEDCB-65 - Add new transaction status: EXPIRED
 * EDGEDCB-68 - Proxy request to refresh shadow locations
+* EDGEDCB-71 - Use GitHub Workflows for Maven
 
 ## v1.3.0 - 2025-03-14
 
