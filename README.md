@@ -5,6 +5,30 @@ Copyright (C) 2021-2023 The Open Library Foundation
 This software is distributed under the terms of the Apache License,
 Version 2.0. See the file "[LICENSE](LICENSE)" for more information.
 
+## Table Of Contents
+<!-- TOC -->
+* [edge-dcb](#edge-dcb)
+  * [Table Of Contents](#table-of-contents)
+  * [Introduction](#introduction)
+  * [Additional information](#additional-information)
+    * [API Details](#api-details)
+* [Security](#security)
+  * [Required Permissions](#required-permissions)
+* [Installation/Deployment](#installationdeployment)
+  * [Configuration](#configuration)
+    * [Ephemeral properties for Karate runs.](#ephemeral-properties-for-karate-runs)
+    * [Configuring spring-boot](#configuring-spring-boot)
+    * [TLS Configuration for HTTP Endpoints](#tls-configuration-for-http-endpoints)
+      * [Configuration Parameters](#configuration-parameters)
+      * [Example Configuration](#example-configuration)
+    * [TLS Configuration for Feign HTTP Clients](#tls-configuration-for-feign-http-clients)
+      * [Configuration Parameters](#configuration-parameters-1)
+      * [Note](#note)
+      * [Example Configuration](#example-configuration-1)
+    * [Issue tracker](#issue-tracker)
+    * [Other documentation](#other-documentation)
+<!-- TOC -->
+
 ## Introduction
 The purpose of this edge API is to bridge the gap between DCB provider and FOLIO.
 
@@ -18,11 +42,11 @@ Primarily, there are two modules involved in DCB workflow: mod-dcb, which intera
 ### API Details
 API provides the following URLs for working with DCB :
 
-| Method | URL                                                | Description |
-|---|----------------------------------------------------|---|
-| GET | /dcbService/transactions/{dcbTransactionId}/status | Get transaction status across circulation institutions |
-| PUT | /dcbService/transactions/{dcbTransactionId}/status | Update transaction status across circulation institutions |
-| POST | /dcbService/transactions/{dcbTransactionId}        | Create a dcb transaction for circulation institutions  |
+| Method | URL                                                | Description                                                 |
+|--------|----------------------------------------------------|-------------------------------------------------------------|
+| GET    | /dcbService/transactions/{dcbTransactionId}/status | Get transaction status across circulation institutions      |
+| PUT    | /dcbService/transactions/{dcbTransactionId}/status | Update transaction status across circulation institutions   |
+| POST   | /dcbService/transactions/{dcbTransactionId}        | Create a dcb transaction for circulation institutions       |
 | GET    | /dcbService/transactions/status                    | get list of transaction updated between a given query range |
 
 # Security
@@ -43,7 +67,7 @@ Institutional users should be granted the following permissions in order to use 
 | Property                | Default                                   | Description                                                         |
 |-------------------------|-------------------------------------------|---------------------------------------------------------------------|
 | `server.port`           | `8081`                                    | Server port to listen on                                            |
-| `folio.client.okapiUrl` | `http://okapi:9130`                      | Okapi (URL)                                                         |
+| `folio.client.okapiUrl` | `http://okapi:9130`                       | Okapi (URL)                                                         |
 | `secure_store`          | `Ephemeral`                               | Type of secure store to use.  Valid: `Ephemeral`, `AwsSsm`, `Vault` |
 | `secure_store_props`    | `src/main/resources/ephemeral.properties` | Path to a properties file specifying secure store configuration     |
 
