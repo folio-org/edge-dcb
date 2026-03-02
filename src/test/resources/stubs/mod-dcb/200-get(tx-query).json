@@ -1,0 +1,50 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/transactions/status",
+    "queryParameters": {
+      "pageNumber": {
+        "equalTo": "0"
+      },
+      "pageSize": {
+        "equalTo": "1000"
+      },
+      "fromDate": {
+        "equalTo": "2026-01-01T00:00Z"
+      },
+      "toDate": {
+        "equalTo": "2026-01-10T00:00Z"
+      }
+    },
+    "headers": {
+      "x-okapi-tenant": {
+        "equalTo": "test_tenant"
+      },
+      "x-okapi-token": {
+        "equalTo": "edgeDcbTestAccessToken"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "totalRecords": 1,
+      "currentPageNumber": 0,
+      "currentPageSize": 1000,
+      "maximumPageNumber": 0,
+      "transactions": [
+        {
+          "id": "3cedc460-9b08-41fb-b995-d568fad95e13",
+          "role": "LENDER",
+          "status": "ITEM_CHECKED_OUT",
+          "item": {
+            "holdCount": 10
+          }
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

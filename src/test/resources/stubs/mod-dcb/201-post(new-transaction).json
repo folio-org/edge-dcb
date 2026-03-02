@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPathTemplate": "/transactions/{dcbTransactionId}",
+    "pathParameters": {
+      "dcbTransactionId": {
+        "equalTo": "3cedc460-9b08-41fb-b995-d568fad95e13"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "item": {
+            "barcode": "DCB_ITEM",
+            "id": "5b95877d-86c0-4cb7-a0cd-7660b348ae5a",
+            "lendingLibraryCode": "KU",
+            "locationCode": "KU/CC/DI/O",
+            "materialType": "book",
+            "title": "ITEM"
+          },
+          "patron": {
+            "barcode": "DCB_PATRON",
+            "borrowingLibraryCode": "E",
+            "group": "staff",
+            "id": "571b0a2c-9456-40b5-a449-d41fe6017082",
+            "localNames": "[John, Smith]"
+          },
+          "role": "LENDER"
+        }
+      }
+    ],
+    "headers": {
+      "x-okapi-tenant": {
+        "equalTo": "test_tenant"
+      },
+      "x-okapi-token": {
+        "equalTo": "edgeDcbTestAccessToken"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": "{{request.body}}",
+    "transformers": [
+      "response-template"
+    ],
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

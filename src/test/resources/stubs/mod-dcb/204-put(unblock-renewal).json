@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "PUT",
+    "urlPathTemplate": "/transactions/{transactionId}/unblock-renewal",
+    "pathParameters": {
+      "transactionId": {
+        "equalTo": "3cedc460-9b08-41fb-b995-d568fad95e13"
+      }
+    },
+    "headers": {
+      "x-okapi-tenant": {
+        "equalTo": "test_tenant"
+      },
+      "x-okapi-token": {
+        "equalTo": "edgeDcbTestAccessToken"
+      }
+    }
+  },
+  "response": {
+    "status": 204
+  }
+}

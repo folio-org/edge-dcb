@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "PUT",
+    "urlPathTemplate": "/transactions/{transactionId}/status",
+    "pathParameters": {
+      "transactionId": {
+        "equalTo": "3cedc460-9b08-41fb-b995-d568fad95e13"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "status": "AWAITING_PICKUP"
+        }
+      }
+    ],
+    "headers": {
+      "x-okapi-tenant": {
+        "equalTo": "test_tenant"
+      },
+      "x-okapi-token": {
+        "equalTo": "edgeDcbTestAccessToken"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "status": "AWAITING_PICKUP"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

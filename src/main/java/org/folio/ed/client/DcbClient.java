@@ -1,45 +1,51 @@
 package org.folio.ed.client;
 
-import org.folio.ed.client.config.OkapiFeignClientConfig;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 import org.folio.ed.domain.dto.DcbTransaction;
 import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.ed.domain.dto.TransactionStatusResponse;
 import org.folio.ed.domain.dto.TransactionStatusResponseCollection;
 import org.folio.ed.domain.dto.DcbUpdateTransaction;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.service.annotation.GetExchange;
+import org.springframework.web.service.annotation.HttpExchange;
+import org.springframework.web.service.annotation.PostExchange;
+import org.springframework.web.service.annotation.PutExchange;
 
-@FeignClient(name = "transactions", configuration = OkapiFeignClientConfig.class)
+@HttpExchange(value = "transactions")
 public interface DcbClient {
 
-  @GetMapping(value = "/{dcbTransactionId}/status")
-  TransactionStatusResponse getDcbTransactionStatus(@PathVariable("dcbTransactionId") String dcbTransactionId);
+  @GetExchange(value = "/{dcbTransactionId}/status")
+  TransactionStatusResponse getDcbTransactionStatus(@PathVariable String dcbTransactionId);
 
-  @PostMapping(value = "/{dcbTransactionId}")
-  TransactionStatusResponse createCirculationRequest(@PathVariable("dcbTransactionId") String dcbTransactionId,
-                                                                       @RequestBody DcbTransaction dcbTransaction);
-  @PutMapping(value = "/{dcbTransactionId}/status")
+  @PostExchange(value = "/{dcbTransactionId}")
+  TransactionStatusResponse createCirculationRequest(
+    @PathVariable String dcbTransactionId,
+    @RequestBody DcbTransaction dcbTransaction);
+
+  @PutExchange(value = "/{dcbTransactionId}/status")
   TransactionStatusResponse updateTransactionStatus(@PathVariable("dcbTransactionId") String dcbTransactionId,
-                                                                      @RequestBody TransactionStatus transactionStatus);
+    @RequestBody TransactionStatus transactionStatus);
 
-  @GetMapping(value = "/status")
-  TransactionStatusResponseCollection getTransactionStatusList(@RequestParam("fromDate") String fromDate, @RequestParam("toDate") String toDate,
-                                                               @RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize);
+  @GetExchange(value = "/status")
+  TransactionStatusResponseCollection getTransactionStatusList(@RequestParam("fromDate") String fromDate,
+    @RequestParam("toDate") String toDate,
+    @RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize);
 
-  @PutMapping(value = "/{dcbTransactionId}")
-  void updateTransactionDetails(@PathVariable("dcbTransactionId") String dcbTransactionId, @RequestBody DcbUpdateTransaction dcbUpdateTransaction);
+  @PutExchange(value = "/{dcbTransactionId}")
+  void updateTransactionDetails(@PathVariable("dcbTransactionId") String dcbTransactionId,
+    @RequestBody DcbUpdateTransaction dcbUpdateTransaction);
 
-  @PutMapping(value = "/{dcbTransactionId}/renew")
+  @PutExchange(value = "/{dcbTransactionId}/renew")
   TransactionStatusResponse renewLoanByTransactionId(@PathVariable String dcbTransactionId);
 
-  @PutMapping("/{dcbTransactionId}/block-renewal")
+  @PutExchange("/{dcbTransactionId}/block-renewal")
   void blockItemRenewalByTransactionId(@PathVariable("dcbTransactionId") String dcbTransactionId);
 
-  @PutMapping("/{dcbTransactionId}/unblock-renewal")
+  @PutExchange("/{dcbTransactionId}/unblock-renewal")
   void unblockItemRenewalByTransactionId(@PathVariable("dcbTransactionId") String dcbTransactionId);
 }
