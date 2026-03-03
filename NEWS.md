@@ -3,6 +3,7 @@
 * EDGEDCB-65 - Add new transaction status: EXPIRED
 * EDGEDCB-68 - Proxy request to refresh shadow locations
 * EDGEDCB-71 - Use GitHub Workflows for Maven
+* EDGEDCB-60 - Upgrade module to SpringBoot4.0 and Spring7.0
 
 ## v1.3.0 - 2025-03-14
 
