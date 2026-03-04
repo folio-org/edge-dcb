@@ -221,16 +221,16 @@ class DcbEdgeRequestHandlingTest {
     "/stubs/authn/201-post(system_login).json",
     "/stubs/mod-dcb/404-get(transaction-by-id).json",
   })
-  void shouldThrowErrorForFeignException() throws Exception {
+  void shouldThrowErrorForExchangeException() throws Exception {
     mockMvc.perform(get("/dcbService/transactions/{transactionId}/status", TRANSACTION_ID)
         .queryParam("apiKey", ApiKeyUtils.generateApiKey(10, TENANT, USERNAME))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
       // As dcb will return Error message of type Errors, trying to assert the same here
-      .andExpect(status().isInternalServerError())
+      .andExpect(status().isNotFound())
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.errors[0].message").value(containsString("404 Not Found:")))
-      .andExpect(jsonPath("$.errors[0].message").value(containsString("Unable to find Dcb transaction")));
+      .andExpect(jsonPath("$.errors[0].message").value(
+        "Unable to find Dcb transaction: 3cedc460-9b08-41fb-b995-d568fad95e13"));
   }
 
   @Test

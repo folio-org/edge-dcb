@@ -8,16 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
-/**
- * Feign client configuration to add the Okapi headers (x-okapi-tenant, x-okapi-token, x-okapi-user-id) from incoming
- * requests to outgoing Feign client requests and handle errors.
- *
- * <p />
- * Usage:
- * Use this class as the configuration in the <code>@FeignClient</code> annotation. E.g.,
- * <code>@FeignClient(name = "myClient", configuration = OkapiFeignClientConfig.class)</code>
- *
- */
 @Configuration
 @RequiredArgsConstructor
 public class HttpExchangeConfiguration {

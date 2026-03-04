@@ -21,7 +21,7 @@ Version 2.0. See the file "[LICENSE](LICENSE)" for more information.
     * [TLS Configuration for HTTP Endpoints](#tls-configuration-for-http-endpoints)
       * [Configuration Parameters](#configuration-parameters)
       * [Example Configuration](#example-configuration)
-    * [TLS Configuration for Feign HTTP Clients](#tls-configuration-for-feign-http-clients)
+    * [TLS Configuration for Exchange HTTP Clients](#tls-configuration-for-exchange-http-clients)
       * [Configuration Parameters](#configuration-parameters-1)
       * [Note](#note)
       * [Example Configuration](#example-configuration-1)
@@ -150,9 +150,9 @@ SERVER_SSL_BUNDLE=web-server
 SERVER_PORT=8443
 ```
 
-### TLS Configuration for Feign HTTP Clients
+### TLS Configuration for Exchange HTTP Clients
 
-To configure Transport Layer Security (TLS) for HTTP clients created using Feign annotations in the edge module, you can use the following configuration parameters. These parameters allow you to specify trust store details necessary for setting up TLS for Feign clients.
+To configure Transport Layer Security (TLS) for HTTP clients created using annotations in the edge module, you can use the following configuration parameters. These parameters allow you to specify trust store details necessary for setting up TLS for exchange clients.
 
 #### Configuration Parameters
 
@@ -161,7 +161,7 @@ To configure Transport Layer Security (TLS) for HTTP clients created using Feign
 - **Example**: `folio.client.okapiUrl=https://okapi:443`
 
 2. **`folio.client.tls.enabled`**
-- **Description**: Enables or disables TLS for the Feign clients.
+- **Description**: Enables or disables TLS for the Exchange clients.
 - **Example**: `folio.client.tls.enabled=true`
 
 3. **`folio.client.tls.trustStorePath`**
@@ -181,7 +181,7 @@ The `trustStorePath`, `trustStorePassword`, and `trustStoreType` parameters can 
 
 #### Example Configuration
 
-To enable TLS for Feign HTTP clients using the above parameters, you need to provide them as the environment variables. Below is an example configuration:
+To enable TLS for Exchange HTTP clients using the above parameters, you need to provide them as the environment variables. Below is an example configuration:
 
 ```properties
 folio.client.okapiUrl=https://okapi:443

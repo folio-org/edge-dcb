@@ -15,10 +15,6 @@ spring:
     enabled: false
   flyway:
     enabled: false
-  cloud:
-    openfeign:
-      okhttp:
-        enabled: true
 management:
   endpoints:
     web:
@@ -28,11 +24,6 @@ management:
   endpoint:
     loggers:
       access: READ_ONLY
-feign:
-  client:
-    config:
-      default:
-        loggerLevel: full
 folio:
   tenant:
     validation:
