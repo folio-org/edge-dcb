@@ -1,7 +1,5 @@
 package org.folio.ed.client;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 import org.folio.ed.domain.dto.DcbTransaction;
 import org.folio.ed.domain.dto.TransactionStatus;
 import org.folio.ed.domain.dto.TransactionStatusResponse;
@@ -28,24 +26,28 @@ public interface DcbClient {
     @RequestBody DcbTransaction dcbTransaction);
 
   @PutExchange(value = "/{dcbTransactionId}/status")
-  TransactionStatusResponse updateTransactionStatus(@PathVariable("dcbTransactionId") String dcbTransactionId,
+  TransactionStatusResponse updateTransactionStatus(
+    @PathVariable String dcbTransactionId,
     @RequestBody TransactionStatus transactionStatus);
 
   @GetExchange(value = "/status")
-  TransactionStatusResponseCollection getTransactionStatusList(@RequestParam("fromDate") String fromDate,
+  TransactionStatusResponseCollection getTransactionStatusList(
+    @RequestParam("fromDate") String fromDate,
     @RequestParam("toDate") String toDate,
-    @RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize);
+    @RequestParam("pageNumber") int pageNumber,
+    @RequestParam("pageSize") int pageSize);
 
   @PutExchange(value = "/{dcbTransactionId}")
-  void updateTransactionDetails(@PathVariable("dcbTransactionId") String dcbTransactionId,
+  void updateTransactionDetails(
+    @PathVariable String dcbTransactionId,
     @RequestBody DcbUpdateTransaction dcbUpdateTransaction);
 
   @PutExchange(value = "/{dcbTransactionId}/renew")
   TransactionStatusResponse renewLoanByTransactionId(@PathVariable String dcbTransactionId);
 
   @PutExchange("/{dcbTransactionId}/block-renewal")
-  void blockItemRenewalByTransactionId(@PathVariable("dcbTransactionId") String dcbTransactionId);
+  void blockItemRenewalByTransactionId(@PathVariable String dcbTransactionId);
 
   @PutExchange("/{dcbTransactionId}/unblock-renewal")
-  void unblockItemRenewalByTransactionId(@PathVariable("dcbTransactionId") String dcbTransactionId);
+  void unblockItemRenewalByTransactionId(@PathVariable String dcbTransactionId);
 }

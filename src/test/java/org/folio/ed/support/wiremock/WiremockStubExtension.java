@@ -8,9 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.github.tomakehurst.wiremock.stubbing.ServeEvent;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
@@ -26,9 +23,15 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.intellij.lang.annotations.Language;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
@@ -41,19 +44,22 @@ public class WiremockStubExtension implements
 
   private static final String STUB_IDS = "stubIds";
   private static final Namespace NAMESPACE = Namespace.create(WiremockStubExtension.class);
-  private static final ObjectMapper MAPPER = new ObjectMapper()
-    .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-    .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL)
-    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+  protected static final JsonMapper MAPPER = JsonMapper.builder()
+    .disable(tools.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+    .enable(tools.jackson.databind.DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+    .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
+    .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
+    .build();
+
   private static final ClassLoader CLASS_LOADER = WiremockStubExtension.class.getClassLoader();
 
   @Override
-  public void afterAll(ExtensionContext context) {
+  public void afterAll(@NonNull ExtensionContext context) {
     resetWiremockStubs();
   }
 
   @Override
-  public void beforeAll(ExtensionContext context) {
+  public void beforeAll(@NonNull ExtensionContext context) {
     resetWiremockStubs();
   }
 
@@ -114,7 +120,7 @@ public class WiremockStubExtension implements
 
     // Support both "classpath:" prefixed and plain paths
     var classpathPrefix = "classpath:";
-    var resourcePath = StringUtils.startsWith(path, classpathPrefix)
+    var resourcePath = Strings.CI.startsWith(path, classpathPrefix)
       ? path.substring(classpathPrefix.length())
       : path;
 
