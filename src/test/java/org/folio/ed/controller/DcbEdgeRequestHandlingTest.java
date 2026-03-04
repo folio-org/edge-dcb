@@ -188,7 +188,6 @@ class DcbEdgeRequestHandlingTest {
         .accept(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
       .andExpect(content().string(asJsonString(createTransactionStatus(AWAITING_PICKUP))));
-    ;
 
     verifyExchangeRequestHeaders(PUT, "/transactions/%s/status".formatted(TRANSACTION_ID));
   }
