@@ -1,0 +1,68 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/dcb/shadow-locations/refresh",
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "agencies": [],
+          "locations": [
+            {
+              "name": "test",
+              "code": "T-1",
+              "agency": {
+                "name": "test-agency",
+                "code": "AG"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "headers": {
+      "x-okapi-tenant": {
+        "equalTo": "test_tenant"
+      },
+      "x-okapi-token": {
+        "equalTo": "edgeDcbTestAccessToken"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "jsonBody": {
+      "location-units": {
+        "campuses": [
+          {
+            "code": "AG",
+            "status": "SUCCESS"
+          }
+        ],
+        "institutions": [
+          {
+            "code": "AG",
+            "status": "SUCCESS"
+          }
+        ],
+        "libraries": [
+          {
+            "code": "AG",
+            "status": "SUCCESS"
+          }
+        ]
+      },
+      "locations": [
+        {
+          "code": "T-1",
+          "status": "SUCCESS"
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

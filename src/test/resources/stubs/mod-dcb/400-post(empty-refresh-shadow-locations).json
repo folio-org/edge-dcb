@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPathTemplate": "dcb/shadow-locations/refresh",
+    "headers": {
+      "x-okapi-tenant": {
+        "equalTo": "test_tenant"
+      },
+      "x-okapi-token": {
+        "equalTo": "edgeDcbTestAccessToken"
+      },
+      "Content-Type": {
+        "equalTo": "application/json"
+      }
+    }
+  },
+  "response": {
+    "jsonBody": {
+      "role": "LENDER",
+      "status": "EXPIRED"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

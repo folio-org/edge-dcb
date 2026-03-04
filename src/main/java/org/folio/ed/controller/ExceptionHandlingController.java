@@ -2,7 +2,6 @@ package org.folio.ed.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import feign.FeignException;
 import lombok.extern.log4j.Log4j2;
 import org.folio.ed.domain.dto.Errors;
 import org.springframework.http.HttpStatus;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import static org.folio.ed.client.utils.ErrorHelper.ErrorCode.INTERNAL_SERVER_ERROR;
@@ -46,15 +46,15 @@ public class ExceptionHandlingController {
   }
 
   /**
-   * Exception handler for Feign client errors, passing them back to the edge API caller.
-   * Overall flow here: Errors from Feign clients are mapped to {@link Errors}
-   * then wrapped into {@link ResponseEntity} object with same status code which got from Feign client
+   * Exception handler for http client errors, passing them back to the edge API caller.
+   * Overall flow here: Errors from exchange clients are mapped to {@link Errors}
+   * then wrapped into {@link ResponseEntity} object with same status code which got from exchange client
    */
-  @ExceptionHandler(FeignException.class)
-  public ResponseEntity<Errors> handleFeignError(FeignException ex) {
+  @ExceptionHandler(HttpStatusCodeException.class)
+  public ResponseEntity<Errors> handleExchangeError(HttpStatusCodeException ex) {
     logExceptionMessage(ex);
-    var status = HttpStatus.resolve(ex.status());
-    String body = ex.contentUTF8();
+    var status = ex.getStatusCode();
+    String body = ex.getResponseBodyAsString();
     Errors errors;
     try {
       errors = objectMapper.readValue(body, Errors.class);

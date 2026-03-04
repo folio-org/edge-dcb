@@ -1,14 +1,16 @@
 package org.folio.ed.client;
 
-import org.folio.ed.client.config.OkapiFeignClientConfig;
 import org.folio.ed.domain.dto.RefreshShadowLocationResponse;
 import org.folio.ed.domain.dto.ShadowLocationRefreshBody;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = "dcb", configuration = OkapiFeignClientConfig.class)
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.service.annotation.HttpExchange;
+import org.springframework.web.service.annotation.PostExchange;
+
+@HttpExchange("dcb")
 public interface DcbRefreshLocationsClient {
 
-  @PostMapping(value = "/shadow-locations/refresh")
-  RefreshShadowLocationResponse refreshShadowLocations(ShadowLocationRefreshBody requestBody);
+  @PostExchange("/shadow-locations/refresh")
+  RefreshShadowLocationResponse refreshShadowLocations(
+    @RequestBody ShadowLocationRefreshBody requestBody);
 }
