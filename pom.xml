@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.0.3</version>
+    <version>4.0.4</version>
     <relativePath />
   </parent>
 
@@ -36,7 +36,7 @@
 
     <!-- Test Dependency Versions   -->
     <awaitility.version>4.3.0</awaitility.version>
-    <testcontainers.version>2.0.3</testcontainers.version>
+    <testcontainers.version>2.0.4</testcontainers.version>
     <wiremock-standalone.version>3.13.2</wiremock-standalone.version>
 
     <!-- Plugin Versions   -->
