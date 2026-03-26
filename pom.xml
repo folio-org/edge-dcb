@@ -354,7 +354,6 @@
                 <java8>true</java8>
                 <dateLibrary>java8</dateLibrary>
                 <interfaceOnly>true</interfaceOnly>
-                <withXml>true</withXml>
                 <useSpringBoot3>true</useSpringBoot3>
                 <generateBuilders>true</generateBuilders>
               </configOptions>
