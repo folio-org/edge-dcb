@@ -354,7 +354,10 @@
                 <java8>true</java8>
                 <dateLibrary>java8</dateLibrary>
                 <interfaceOnly>true</interfaceOnly>
-                <useSpringBoot3>true</useSpringBoot3>
+                <withXml>true</withXml>
+                <useJackson3>true</useJackson3>
+                <openApiNullable>false</openApiNullable>
+                <useSpringBoot4>true</useSpringBoot4>
                 <generateBuilders>true</generateBuilders>
               </configOptions>
             </configuration>
