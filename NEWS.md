@@ -1,3 +1,10 @@
+## v2.0.1 - 2026-07-28
+
+### Dependencies
+* Bump `edge-common-spring` from `4.0.0` to `4.0.1` ([EDGEDCB-74](https://folio-org.atlassian.net/browse/EDGEDCB-74))
+
+---
+
 ## v2.0.0 -  2026-04-17
 
 ### Breaking changes
