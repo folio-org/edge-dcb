@@ -1,3 +1,10 @@
+## v2.0.2 - 2026-11-20
+
+### Dependencies
+* Bump `spring-boot` from `4.0.5` to `4.1.1` 
+* Bump `edge-common-spring` from `4.0.1` to `4.0.4` 
+* Bump `folio-spring-support` from `10.0.0` to `10.0.1` ([EDGEDCB-83](https://folio-org.atlassian.net/browse/EDGEDCB-83))
+
 ## v2.0.1 - 2026-07-28
 
 ### Dependencies
